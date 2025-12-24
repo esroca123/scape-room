@@ -3,10 +3,61 @@ import random
 import time
 import os
 
-# --- CONFIGURATION DE LA PAGE ---
-st.set_page_config(page_title="Tirage au sort des équipes", layout="wide")
+# --- CONFIGURACIÓN DE LA PAGE ---
+st.set_page_config(page_title="Sorteo Navideño Noel", layout="wide")
 
-# --- 1. DICTIONNAIRE DES PARTICIPANTS ---
+# --- ESTILOS CSS PERSONALIZADOS (NAVIDAD Y BOTÓN) ---
+st.markdown("""
+    <style>
+    /* Fondo de la aplicación */
+    .stApp {
+        background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), 
+                    url("https://www.transparenttextures.com/patterns/snow.png"),
+                    linear-gradient(to bottom, #d63031, #2d3436);
+        background-attachment: fixed;
+    }
+
+    /* Botón Circular Gigante */
+    div.stButton > button:first-child {
+        display: block;
+        margin: 0 auto;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 10px solid #f1c40f;
+        background-color: #e74c3c;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        box-shadow: 0 10px #c0392b, 0 20px 30px rgba(0,0,0,0.5);
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+    }
+    
+    div.stButton > button:first-child:hover {
+        background-color: #ff7675;
+        transform: scale(1.05);
+    }
+
+    div.stButton > button:first-child:active {
+        box-shadow: 0 5px #c0392b, 0 10px 15px rgba(0,0,0,0.5);
+        transform: translateY(5px);
+    }
+
+    /* Tarjetas de fotos */
+    .img-card {
+        border-radius: 50%;
+        border: 4px solid #2ecc71;
+        transition: transform 0.5s;
+    }
+    
+    .img-card:hover {
+        transform: rotate(10deg);
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# --- 1. DICCIONARIO DE PARTICIPANTES ---
 PARTICIPANTES = {
     "ROSE": "fotos/ROSE.jpeg",
     "MARIE": "fotos/MARIE.jpeg",
@@ -29,71 +80,83 @@ if 'pendientes' not in st.session_state:
     st.session_state.grupo_a = []
     st.session_state.grupo_b = []
     st.session_state.ultimo_asignado = None
+    st.session_state.mostrar_animacion = False
 
 def asignar_siguiente():
     if st.session_state.pendientes:
         nom = st.session_state.pendientes.pop(0)
         equipe = random.choice(['A', 'B'])
         chemin_photo = PARTICIPANTES.get(nom, FOTO_AVATAR)
-        if not os.path.exists(chemin_photo):
-            chemin_photo = FOTO_AVATAR
+        
+        # Simular emoción
+        st.session_state.mostrar_animacion = True
+        
         donnees = {"nom": nom, "foto": chemin_photo}
         if equipe == 'A':
             st.session_state.grupo_a.append(donnees)
         else:
             st.session_state.grupo_b.append(donnees)
-        st.session_state.ultimo_asignado = f"✨ {nom} rejoint l'Équipe {equipe} !"
+        st.session_state.ultimo_asignado = (nom, equipe)
 
 # --- 3. INTERFACE UTILISATEUR ---
-st.title("🎲 Tirage au sort des Équipes")
-st.markdown("---")
+st.markdown("<h1 style='text-align: center; color: white; text-shadow: 2px 2px #000;'>🎅 Gran Sorteo de Navidad Noel 🎄</h1>", unsafe_allow_html=True)
 
-col_control, col_info = st.columns([1, 2])
-with col_control:
-    if st.session_state.pendientes:
-        prochaine = st.session_state.pendientes[0]
-        st.metric(label="Prochaine personne :", value=prochaine)
-        if st.button("🎰 LANCER LA ROULETTE", type="primary", use_container_width=True):
-            asignar_siguiente()
-            st.rerun()
-    else:
-        st.success("🎉 Tirage terminé !")
-        if st.button("Réinitialiser"):
-            for key in st.session_state.keys(): del st.session_state[key]
-            st.rerun()
+# ESPACIO PARA EL BOTÓN CENTRAL
+st.markdown("<br>", unsafe_allow_html=True)
 
-with col_info:
-    if st.session_state.ultimo_asignado:
-        st.info(st.session_state.ultimo_asignado)
+if st.session_state.pendientes:
+    prochaine = st.session_state.pendientes[0]
+    
+    # Mostrar quién sigue con estilo
+    st.markdown(f"<h3 style='text-align: center; color: white;'>Siguiente en pasar: <br><span style='font-size: 50px;'>{prochaine}</span></h3>", unsafe_allow_html=True)
+    
+    if st.button("SORTEAR"):
+        with st.spinner("🎅 Santa está decidiendo..."):
+            time.sleep(2) # Tiempo de suspenso
+        asignar_siguiente()
+        st.snow() # ¡Efecto de nieve al elegir!
+        st.rerun()
+else:
+    st.success("🎉 ¡Todos los regalos... digo, personas, están asignadas!")
+    if st.button("🔄 Reiniciar Navidad"):
+        for key in st.session_state.keys(): del st.session_state[key]
+        st.rerun()
 
-st.divider()
+# Mostrar mensaje de último asignado con globos si es final
+if st.session_state.ultimo_asignado:
+    nom, grupo = st.session_state.ultimo_asignado
+    color = "#E74C3C" if grupo == 'A' else "#3498DB"
+    st.markdown(f"<div style='text-align: center; padding: 20px; background: white; border-radius: 15px; border: 5px solid {color};'><h2>✨ {nom} ahora es del Equipo {grupo} ✨</h2></div>", unsafe_allow_html=True)
+    if not st.session_state.pendientes:
+        st.balloons()
 
-# --- 4. AFFICHAGE DES ÉQUIPES CON DIVISIÓN ---
-# Creamos las columnas pero añadimos un estilo de borde vertical
+st.markdown("<br><hr>", unsafe_allow_html=True)
+
+# --- 4. AFFICHAGE DES ÉQUIPES ---
 col_a, col_espacio, col_b = st.columns([10, 1, 10])
 
 with col_a:
-    st.markdown("<h2 style='text-align: center; color: #E74C3C;'>🔴 ÉQUIPE A</h2>", unsafe_allow_html=True)
-    st.markdown("<div style='border-bottom: 2px solid #E74C3C; margin-bottom: 20px;'></div>", unsafe_allow_html=True)
-    
+    st.markdown("<h2 style='text-align: center; color: white; background: #E74C3C; border-radius: 10px;'>🎁 EQUIPO A (Rojos)</h2>", unsafe_allow_html=True)
     res_a = st.columns(3)
     for i, p in enumerate(st.session_state.grupo_a):
         with res_a[i % 3]:
-            st.image(p["foto"], width=120)
-            st.caption(f"**{p['nom']}**")
-
-# Esta columna vacía actúa como el separador visual
-with col_espacio:
-    st.markdown("""
-        <div style='border-left: 2px solid #ddd; height: 500px; margin: auto; width: 1px;'></div>
-    """, unsafe_allow_html=True)
+            st.markdown(f"""
+                <div style='text-align: center;'>
+                    <img src='https://cdn-icons-png.flaticon.com/512/3893/3893071.png' width='30'><br>
+                    <img src='app/{p["foto"]}' class='img-card' style='width: 100px; height: 100px; object-fit: cover;'>
+                    <p style='color: white;'><b>{p['nom']}</b></p>
+                </div>
+            """, unsafe_allow_html=True)
 
 with col_b:
-    st.markdown("<h2 style='text-align: center; color: #3498DB;'>🔵 ÉQUIPE B</h2>", unsafe_allow_html=True)
-    st.markdown("<div style='border-bottom: 2px solid #3498DB; margin-bottom: 20px;'></div>", unsafe_allow_html=True)
-    
+    st.markdown("<h2 style='text-align: center; color: white; background: #3498DB; border-radius: 10px;'>❄️ EQUIPO B (Azules)</h2>", unsafe_allow_html=True)
     res_b = st.columns(3)
     for i, p in enumerate(st.session_state.grupo_b):
         with res_b[i % 3]:
-            st.image(p["foto"], width=120)
-            st.caption(f"**{p['nom']}**")
+            st.markdown(f"""
+                <div style='text-align: center;'>
+                    <img src='https://cdn-icons-png.flaticon.com/512/642/642000.png' width='30'><br>
+                    <img src='app/{p["foto"]}' class='img-card' style='width: 100px; height: 100px; object-fit: cover;'>
+                    <p style='color: white;'><b>{p['nom']}</b></p>
+                </div>
+            """, unsafe_allow_html=True)
