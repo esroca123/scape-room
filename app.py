@@ -13,9 +13,9 @@ PARTICIPANTES = {
     "CARL": "fotos/CARL.jpg",
     "NATALIE": "fotos/NATALIE.jpg",
     "MARC": "fotos/MARC.jpg",
-    "HELENE": "fotos/HELENE.jpg"
+    "HELENE": "fotos/HELENE.jpg",
     "REGEAN": "fotos/REGEAN.jpg",
-    "CHARLOT": "fotos/CHARLOT.jpg"
+    "CHARLOT": "fotos/CHARLOT.jpg",
     "LOUIS": "fotos/LOUIS.jpg",
    
 }
