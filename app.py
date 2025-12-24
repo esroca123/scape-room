@@ -8,15 +8,15 @@ st.set_page_config(page_title="Tirage au sort des équipes", layout="wide")
 
 # --- 1. DICTIONNAIRE DES PARTICIPANTS ---
 PARTICIPANTES = {
-    "ROSE": "fotos/ROSE.jpg",
-    "MARIE": "fotos/MARIE.jpg",
-    "CARL": "fotos/CARL.jpg",
-    "NATALIE": "fotos/NATALIE.jpg",
-    "MARC": "fotos/MARC.jpg",
-    "HELENE": "fotos/HELENE.jpg",
-    "REGEAN": "fotos/REGEAN.jpg",
-    "CHARLOT": "fotos/CHARLOT.jpg",
-    "LOUIS": "fotos/LOUIS.jpg"
+    "ROSE": "fotos/ROSE.jpeg",
+    "MARIE": "fotos/MARIE.jpeg",
+    "CARL": "fotos/CARL.jpeg",
+    "NATALIE": "fotos/NATALIE.jpeg",
+    "MARC": "fotos/MARC.jpeg",
+    "HELENE": "fotos/HELENE.jpeg",
+    "REGEAN": "fotos/REGEAN.jpeg",
+    "CHARLOT": "fotos/CHARLOT.jpeg",
+    "LOUIS": "fotos/LOUIS.jpeg"
 }
 
 FOTO_AVATAR = "https://cdn-icons-png.flaticon.com/512/147/147144.png"
