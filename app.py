@@ -70,15 +70,15 @@ st.markdown("""
 
 # --- 1. DICTIONNAIRE DES PARTICIPANTS ---
 PARTICIPANTES = {
-    "ROSE": "fotos/ROSE.jpeg",
-    "MARIE": "fotos/MARIE.jpeg",
-    "CARL": "fotos/CARL.jpeg",
-    "NATALIE": "fotos/NATALIE.jpeg",
-    "MARC": "fotos/MARC.jpeg",
-    "HELENE": "fotos/HELENE.jpeg",
-    "REGEAN": "fotos/REGEAN.jpeg",
-    "CHARLOT": "fotos/CHARLOT.jpeg",
-    "LOUIS": "fotos/LOUIS.jpeg"
+    "Rose": "fotos/Rose.png",
+    "Marie": "fotos/Marie.png",
+    "Carl": "fotos/Carl.png",
+    "Nataly": "fotos/Nataly.png",
+    "Marc": "fotos/Marc.png",
+    "Helene": "fotos/Helene.png",
+    "Rejean": "fotos/Rejean.png",
+    "Charlot": "fotos/Charlot.png",
+    "Louis": "fotos/Louis.png"
 }
 
 FOTO_AVATAR = "https://cdn-icons-png.flaticon.com/512/147/147144.png"
